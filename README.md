@@ -35,18 +35,22 @@ BTN_NO_COLOR=#111111
 🚀 Installation & Déploiement
 
 1. Clonez le dépôt sur votre serveur :
-	git clone [https://github.com/votre-pseudo/age-verification-widget.git](https://github.com/votre-pseudo/age-verification-widget.git)
-	cd age-verification-widget
+	```
+	git clone https://github.com/Thana-Teros/Age-verify.git
+	cd Age-verify
+ 
 2. Créez et configurez votre fichier .env (voir la section ci-dessus).
 3. Lancez l'application avec Docker Compose :
-	docker compose build --no-cache
-	docker compose up -d
+   ```
+   docker compose build --no-cache
+   docker compose up -d
 
 
 🔌 Intégration dans Odoo
 Pour afficher la pop-up sur votre site Odoo, ajoutez cette unique ligne de script :
-	<script src="https://votre-domaine-ou-ip:8080/age-verify.js" defer=""></script>
 
+	- avec un domaine : <script src="https://votre-domaine/age-verify.js" defer=""></script>
+	- avec une ip : <script src="https://votre-ip:8080/age-verify.js" defer=""></script>
 
 ## 📄 Licence
 
