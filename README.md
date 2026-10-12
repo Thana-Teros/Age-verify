@@ -6,7 +6,7 @@ Totalement indépendante, sans aucune limite mensuelle de trafic !
 
 ---
 
-## 📋 Fonctionnalités (v1.0)
+## 📋 Fonctionnalités
 
 * **Pop-up d'âge responsive** : Design élégant, adapté aux mobiles et ordinateurs.
 * **Mémorisation du choix** : Utilisation du `localStorage` pour ne pas réafficher la pop-up aux visiteurs réguliers.
