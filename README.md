@@ -46,3 +46,8 @@ BTN_NO_COLOR=#111111
 🔌 Intégration dans Odoo
 Pour afficher la pop-up sur votre site Odoo, ajoutez cette unique ligne de script :
 	<script src="https://votre-domaine-ou-ip:8080/age-verify.js" defer=""></script>
+
+
+## 📄 Licence
+
+Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
