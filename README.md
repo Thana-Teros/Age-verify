@@ -50,4 +50,4 @@ Pour afficher la pop-up sur votre site Odoo, ajoutez cette unique ligne de scrip
 
 ## 📄 Licence
 
-Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce projet est sous licence **MIT**. Voir le fichier LICENSE pour plus de détails.
