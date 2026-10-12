@@ -30,7 +30,7 @@ BTN_YES_BG=#1b4332
 BTN_YES_COLOR=#ffffff
 BTN_NO_BG=#FDF1D3
 BTN_NO_COLOR=#111111
-
+```
 
 🚀 Installation & Déploiement
 
