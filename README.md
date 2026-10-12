@@ -1,6 +1,6 @@
 # 🛡️ Age Verification Widget for Odoo & Websites
 
-Une application web ultra-légère, hébergée sur vos propres serveurs via **Docker**, conçue pour remplacer des services tiers payants ou limités (type Common Ninja) pour la vérification d'âge sur votre site e-commerce (Odoo, WordPress, etc.).
+Une application web ultra-légère, hébergée sur vos propres serveurs via **Docker**, conçue pour remplacer des services tiers payants ou limités pour la vérification d'âge sur votre site e-commerce (Odoo, WordPress, etc.).
 
 Totalement indépendante, sans aucune limite mensuelle de trafic !
 
