@@ -10,18 +10,31 @@ Totalement indépendante, sans aucune limite mensuelle de trafic !
 
 * **Pop-up d'âge responsive** : Design élégant, adapté aux mobiles et ordinateurs.
 * **Mémorisation du choix** : Utilisation du `localStorage` pour ne pas réafficher la pop-up aux visiteurs réguliers.
-* **100% Personnalisable** : Gestion complète des couleurs, du texte et de la redirection via un simple fichier `.env`.
+* **100% Personnalisable** : Gestion complète de l'âge minimal, des textes, des couleurs et de la redirection via un simple fichier `.env`.
 * **Prêt pour Docker** : Déploiement rapide, isolé et automatisé avec Nginx, Docker Compose et un script d'initialisation.
 
 ---
 
 ## ⚙️ Configuration (.env)
 
-Créez un fichier `.env` à la racine de votre projet pour personnaliser l'apparence et le comportement :
+Copiez d'abord le fichier d'exemple, puis éditez votre `.env` :
+
+```sh
+cp .env.example .env
+```
+
+L'âge minimal et les textes se modifient ici. La valeur `__AGE_LIMIT__` est automatiquement remplacée par l'âge choisi :
 
 ```env
-# URL de redirection si l'utilisateur clique sur "J'ai moins de 18 ans"
-REDIRECT_URL=[https://www.google.com](https://www.google.com)
+# Âge minimal et textes affichés
+AGE_LIMIT=18
+TITLE_TEXT=AVEZ-VOUS PLUS DE __AGE_LIMIT__ ANS ?
+DESCRIPTION_TEXT=En entrant sur ce site, vous confirmez avoir l'âge requis.
+YES_BUTTON_TEXT=J'ai plus de __AGE_LIMIT__ ans
+NO_BUTTON_TEXT=J'ai moins de __AGE_LIMIT__ ans
+
+# URL de redirection si l'utilisateur clique sur le bouton « non »
+REDIRECT_URL=https://www.google.com
 
 # Couleurs de la pop-up (Codes Hexadécimaux)
 MODAL_BG_COLOR=#FDF1D3
@@ -32,25 +45,26 @@ BTN_NO_BG=#FDF1D3
 BTN_NO_COLOR=#111111
 ```
 
-🚀 Installation & Déploiement
+## 🚀 Installation & Déploiement
 
 1. Clonez le dépôt sur votre serveur :
-	```
-	git clone https://github.com/Thana-Teros/Age-verify.git
-	cd Age-verify
- 
-2. Créez et configurez votre fichier .env (voir la section ci-dessus).
-3. Lancez l'application avec Docker Compose :
+   ```sh
+   git clone https://github.com/Thana-Teros/Age-verify.git
+   cd Age-verify
    ```
+2. Créez et configurez votre fichier `.env` (voir la section ci-dessus).
+3. Lancez l'application avec Docker Compose :
+   ```sh
    docker compose build --no-cache
    docker compose up -d
+   ```
 
+## 🔌 Intégration dans Odoo
 
-🔌 Intégration dans Odoo
 Pour afficher la pop-up sur votre site Odoo, ajoutez cette unique ligne de script :
 
-	- avec un domaine : <script src="https://votre-domaine/age-verify.js" defer=""></script>
-	- avec une ip : <script src="https://votre-ip:8080/age-verify.js" defer=""></script>
+- Avec un domaine : `<script src="https://votre-domaine/age-verify.js" defer></script>`
+- Avec une IP : `<script src="https://votre-ip:8080/age-verify.js" defer></script>`
 
 ## 📄 Licence
 
