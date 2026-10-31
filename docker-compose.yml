@@ -1,12 +1,24 @@
-version: '3.8'
-
 services:
   age-verify:
     build: .
-    image: age-verify:1.0
-    container_name: APP_age-verify
+    image: age-verify:1.1
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:8080"
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

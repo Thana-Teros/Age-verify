@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate JavaScript and shell syntax
+        run: |
+          node --check age-verify.js
+          sh -n entrypoint.sh
+      - name: Run static safety tests
+        run: node --test tests/*.test.mjs
+      - name: Build the image
+        run: docker build --tag age-verify:test .

@@ -1,11 +1,13 @@
-FROM nginx:alpine
+FROM nginx:1.27-alpine
 
-COPY age-verify.js /usr/share/nginx/html/age-verify.js
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY age-verify.js /usr/share/nginx/html/age-verify.template.js
+COPY index.html /usr/share/nginx/html/index.html
 COPY entrypoint.sh /entrypoint.sh
 
-RUN chmod +x /entrypoint.sh
-RUN echo "Age Verification Service" > /usr/share/nginx/html/index.html
+RUN chmod 0555 /entrypoint.sh \
+    && chown -R nginx:nginx /usr/share/nginx/html /var/cache/nginx /var/run
 
-EXPOSE 80
-
+EXPOSE 8080
+USER nginx
 ENTRYPOINT ["/entrypoint.sh"]

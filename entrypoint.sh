@@ -1,23 +1,53 @@
 #!/bin/sh
+set -eu
 
-replace_placeholder() {
-  placeholder="$1"
-  value="$2"
-  escaped_value=$(printf '%s' "$value" | sed 's/[\\&|]/\\&/g')
-  sed -i "s|${placeholder}|${escaped_value}|g" /usr/share/nginx/html/age-verify.js
+template=/usr/share/nginx/html/age-verify.template.js
+target=/usr/share/nginx/html/age-verify.js
+
+base64_value() {
+  printf '%s' "$1" | base64 | tr -d '\n'
 }
 
-replace_placeholder '__REDIRECT_URL__' "${REDIRECT_URL:-https://www.google.com}"
-replace_placeholder '__MODAL_BG__' "${MODAL_BG_COLOR:-#FDF1D3}"
-replace_placeholder '__TEXT_COLOR__' "${TEXT_COLOR:-#111111}"
-replace_placeholder '__BTN_YES_BG__' "${BTN_YES_BG:-#1b4332}"
-replace_placeholder '__BTN_YES_COLOR__' "${BTN_YES_COLOR:-#ffffff}"
-replace_placeholder '__BTN_NO_BG__' "${BTN_NO_BG:-#FDF1D3}"
-replace_placeholder '__BTN_NO_COLOR__' "${BTN_NO_COLOR:-#111111}"
-replace_placeholder '__TITLE_TEXT__' "${TITLE_TEXT:-AVEZ-VOUS PLUS DE __AGE_LIMIT__ ANS ?}"
-replace_placeholder '__DESCRIPTION_TEXT__' "${DESCRIPTION_TEXT:-En entrant sur ce site, vous confirmez avoir l'âge requis.}"
-replace_placeholder '__NO_BUTTON_TEXT__' "${NO_BUTTON_TEXT:-J'ai moins de __AGE_LIMIT__ ans}"
-replace_placeholder '__YES_BUTTON_TEXT__' "${YES_BUTTON_TEXT:-J'ai plus de __AGE_LIMIT__ ans}"
-replace_placeholder '__AGE_LIMIT__' "${AGE_LIMIT:-18}"
+valid_http_url() {
+  case "$1" in
+    http://*|https://*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+valid_age() {
+  case "$1" in
+    ''|*[!0-9]*) return 1 ;;
+    *) [ "$1" -ge 1 ] && [ "$1" -le 120 ] ;;
+  esac
+}
+
+age_limit=${AGE_LIMIT:-18}
+valid_age "$age_limit" || age_limit=18
+redirect_url=${REDIRECT_URL:-https://www.google.com}
+valid_http_url "$redirect_url" || redirect_url=https://www.google.com
+
+write_encoded() {
+  key=$1
+  value=$2
+  printf '  "%s": "%s"' "$key" "$(base64_value "$value")"
+}
+
+{
+  printf 'window.__AGE_VERIFY_CONFIG__ = Object.freeze({\n'
+  write_encoded ageLimit "$age_limit"; printf ',\n'
+  write_encoded titleText "${TITLE_TEXT:-AVEZ-VOUS PLUS DE __AGE_LIMIT__ ANS ?}"; printf ',\n'
+  write_encoded descriptionText "${DESCRIPTION_TEXT:-En entrant sur ce site, vous confirmez avoir l'âge requis.}"; printf ',\n'
+  write_encoded yesButtonText "${YES_BUTTON_TEXT:-J'ai plus de __AGE_LIMIT__ ans}"; printf ',\n'
+  write_encoded noButtonText "${NO_BUTTON_TEXT:-J'ai moins de __AGE_LIMIT__ ans}"; printf ',\n'
+  write_encoded redirectUrl "$redirect_url"; printf ',\n'
+  write_encoded modalBgColor "${MODAL_BG_COLOR:-#FDF1D3}"; printf ',\n'
+  write_encoded textColor "${TEXT_COLOR:-#111111}"; printf ',\n'
+  write_encoded yesButtonBg "${BTN_YES_BG:-#1b4332}"; printf ',\n'
+  write_encoded yesButtonColor "${BTN_YES_COLOR:-#ffffff}"; printf ',\n'
+  write_encoded noButtonBg "${BTN_NO_BG:-#FDF1D3}"; printf ',\n'
+  write_encoded noButtonColor "${BTN_NO_COLOR:-#111111}"; printf '\n});\n'
+  cat "$template"
+} > "$target"
 
 exec nginx -g 'daemon off;'
