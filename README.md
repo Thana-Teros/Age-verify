@@ -51,7 +51,7 @@ docker compose ps
 
 Par défaut, Compose publie le service uniquement sur `127.0.0.1:8080`. Placez-le derrière un reverse proxy HTTPS, ou adaptez explicitement le mappage de port si une exposition réseau directe est réellement nécessaire.
 
-Le conteneur s'exécute sans privilège root, avec système de fichiers en lecture seule, capacités Linux retirées et vérification d'état. L'image de base Nginx est versionnée et Dependabot surveille ses mises à jour.
+Le conteneur s'exécute sans privilège root, avec système de fichiers en lecture seule, capacités Linux retirées et vérification d'état. Le seul emplacement inscriptible est `/tmp`, monté temporairement : il contient le script configuré et les fichiers temporaires Nginx. L'image de base Nginx est versionnée et Dependabot surveille ses mises à jour.
 
 ## Intégration
 

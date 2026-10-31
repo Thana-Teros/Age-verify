@@ -2,7 +2,12 @@
 set -eu
 
 template=/usr/share/nginx/html/age-verify.template.js
-target=/usr/share/nginx/html/age-verify.js
+target=/tmp/age-verify.js
+temporary_target=${target}.tmp
+
+# The generated asset can contain deployment-specific text. Keep it readable
+# only by the non-root Nginx user that generates and serves it.
+umask 077
 
 base64_value() {
   printf '%s' "$1" | base64 | tr -d '\n'
@@ -48,6 +53,8 @@ write_encoded() {
   write_encoded noButtonBg "${BTN_NO_BG:-#FDF1D3}"; printf ',\n'
   write_encoded noButtonColor "${BTN_NO_COLOR:-#111111}"; printf '\n});\n'
   cat "$template"
-} > "$target"
+} > "$temporary_target"
+
+mv "$temporary_target" "$target"
 
 exec nginx -g 'daemon off;'

@@ -24,3 +24,15 @@ jobs:
         run: node --test tests/*.test.mjs
       - name: Build the image
         run: docker build --tag age-verify:test .
+      - name: Verify the hardened runtime starts and serves the widget
+        run: |
+          docker run --detach --name age-verify-test --read-only --tmpfs /tmp:mode=1777 --cap-drop ALL --security-opt no-new-privileges -p 18080:8080 age-verify:test
+          trap 'docker logs age-verify-test; docker rm --force age-verify-test' EXIT
+          for attempt in {1..20}; do
+            if curl --fail --silent --show-error http://127.0.0.1:18080/age-verify.js > widget.js; then
+              break
+            fi
+            sleep 1
+          done
+          test -s widget.js
+          grep -F 'window.__AGE_VERIFY_CONFIG__' widget.js
