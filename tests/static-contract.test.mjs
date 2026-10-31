@@ -20,6 +20,7 @@ test('the entrypoint serializes configuration without sed interpolation', () => 
   assert.match(entrypoint, /valid_age/);
   assert.match(entrypoint, /target=\/tmp\/age-verify\.js/);
   assert.match(entrypoint, /umask 077/);
+  assert.match(entrypoint, /mkdir -p[\s\\]+\/tmp\/nginx\/client_temp/);
 });
 
 test('the image stays rootless and writes only to its temporary filesystem', () => {

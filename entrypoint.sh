@@ -9,6 +9,15 @@ temporary_target=${target}.tmp
 # only by the non-root Nginx user that generates and serves it.
 umask 077
 
+# Nginx creates the leaf directory but not this parent directory. They are
+# intentionally created by the unprivileged runtime user on the tmpfs mount.
+mkdir -p \
+  /tmp/nginx/client_temp \
+  /tmp/nginx/proxy_temp \
+  /tmp/nginx/fastcgi_temp \
+  /tmp/nginx/uwsgi_temp \
+  /tmp/nginx/scgi_temp
+
 base64_value() {
   printf '%s' "$1" | base64 | tr -d '\n'
 }
